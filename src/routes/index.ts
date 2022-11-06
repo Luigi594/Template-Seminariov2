@@ -1,8 +1,9 @@
-import express from 'express';
-const router  = express.Router();
+import { Request, Router } from 'express';
 
-router.get('/', (_req, res) => {
-  res.json({msg:'Hello World!'});
- });
+const router = Router();
+
+export interface withUserRequest extends Request {
+  user?: any;
+}
 
 export default router;
