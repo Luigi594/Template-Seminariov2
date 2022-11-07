@@ -8,7 +8,7 @@ const apiKeyMW = (req: Request, res: Response, next: NextFunction) => {
     return next();
   }
 
-  return res.status(406).json({ error: 'APIKEY not valid! ' });
+  return res.status(406).json({ error: 'APIKEY not valid!' });
 };
 
 export default apiKeyMW;
