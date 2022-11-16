@@ -12,3 +12,14 @@ export interface IUser {
   roles: string[];
   _id?: unknown;
 }
+
+// Estructura para el user de google
+export interface IUserGoogle {
+  displayName: string;
+  email: string;
+  status: boolean;
+  createdAt: Date;
+  lastLogin: Date;
+  avatar?: string;
+  IdGoogle?: unknown;
+}

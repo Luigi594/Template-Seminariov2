@@ -15,11 +15,6 @@ export class Users {
       .catch((err) => console.error(err));
   }
 
-  public handleErrors(message: string, email: string, _status: string) {
-    console.log(`LOGIN: ${message}, ${email} - ${status}`);
-    throw new Error(`LOGIN ${message}`);
-  }
-
   // método para crear la cuenta del usuario
   public signin(name: string, email: string, password: string) {
     const currentDate = new Date();
@@ -47,22 +42,35 @@ export class Users {
       const user = await this.dao.getUsersByEmail(email);
 
       if (!!!user) {
-        this.handleErrors('NO USER FOUND', user.email, '');
+        console.log('LOGIN: NO USER FOUND: ', `${email}`);
+        throw new Error('LOGIN NO USER FOUND');
       }
 
       if (user.status !== 'ACT') {
-        this.handleErrors('STATUS NOT ACTIVE', user.email, user.status);
+        console.log(
+          'LOGIN: STATUS NOT ACTIVE: ',
+          `${user.email} - ${user.status}`,
+        );
+
         await this.dao.updateUserFailed(user._id.toString());
+        throw new Error('LOGIN STATUS INVALID');
       }
 
       if (!checkPassword(password, user.password)) {
-        this.handleErrors('PASSWORD INVALID', user.email, user.status);
+        console.log(
+          'LOGIN: PASSWORD INVALID: ',
+          `${user.email} - ${user.status}`,
+        );
+
         await this.dao.updateUserFailed(user._id.toString());
+        throw new Error('LOGIN PASSWORD INVALID');
       }
 
       const { name, email: emailUser, avatar, _id } = user;
       const returnUser = { name, email: emailUser, avatar, _id };
+
       await this.dao.updateLoginSuccess(user._id.toString());
+
       return { ...returnUser, token: sign(returnUser) };
     } catch (error) {
       throw error;
